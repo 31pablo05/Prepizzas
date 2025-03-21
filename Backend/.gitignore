@@ -1,0 +1,27 @@
+# Dependencias de Node.js
+node_modules/
+
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Carpetas de compilación / distribución
+build/
+dist/
+
+# Archivos temporales y caché
+tmp/
+.cache/
+
+# Archivos del sistema / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Otros archivos sensibles o de configuración local
+config/*.local.js
