@@ -135,15 +135,21 @@ const OrderForm = ({ onSubmit }) => {
           alt="Fondo"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="absolute inset-0 bg-black opacity-20"></div>
       </div>
 
       {/* Contenedor del formulario */}
-      <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-30 rounded-lg shadow-md animate-fadeIn">
-        <h2 className="text-2xl font-bold text-center mb-6">Realiza tu Pedido</h2>
+      <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-10 rounded-lg shadow-md animate-fadeIn">
+      <h2 className="text-3xl font-extrabold text-center mb-6 
+  bg-gradient-to-r from-green-600 to-green-400 text-transparent bg-clip-text 
+  drop-shadow-md animate-fade-in"
+>
+  Realiza tu Pedido
+</h2>
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Nombre</label>
+            <label className="block text-lg font-medium text-black-700">Nombre</label>
             <input
               type="text"
               name="name"
@@ -154,7 +160,7 @@ const OrderForm = ({ onSubmit }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-lg font-medium text-black-700">Email</label>
             <input
               type="email"
               name="email"
@@ -165,7 +171,7 @@ const OrderForm = ({ onSubmit }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Teléfono</label>
+            <label className="block text-lg font-medium text-black-700">Teléfono</label>
             <input
               type="text"
               name="phone"
@@ -176,7 +182,7 @@ const OrderForm = ({ onSubmit }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Cantidad de Prepizzas</label>
+            <label className="block text-lg font-medium text-black-700">Cantidad de Prepizzas</label>
             <input
               type="number"
               name="quantity"
@@ -186,12 +192,12 @@ const OrderForm = ({ onSubmit }) => {
               required
               className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-md text-black-600">
               Precio total: ${totalPrice.toLocaleString()}
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Fecha de entrega/recogida</label>
+            <label className="block text-lg font-medium text-black-700">Fecha de entrega/recogida</label>
             <input
               type="date"
               name="date"
@@ -202,7 +208,7 @@ const OrderForm = ({ onSubmit }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Tipo de entrega</label>
+            <label className="block text-lg font-medium text-black-700">Tipo de entrega</label>
             <select
               name="delivery"
               value={order.delivery}

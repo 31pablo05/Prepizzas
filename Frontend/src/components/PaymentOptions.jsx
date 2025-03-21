@@ -42,7 +42,7 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
         </button>
       </div>
       {paymentMethod && (
-        <p className="mt-2 text-sm text-gray-700">
+        <p className="mt-2 text-md text-black-700">
           Has seleccionado:{" "}
           <span className="font-bold capitalize">{paymentMethod}</span>
         </p>
