@@ -60,9 +60,9 @@ app.post('/api/create_preference', async (req, res) => {
         address: order.address ? { street_name: order.address } : {},
       },
       back_urls: {
-        success: "https://tienda-prepizzas.vercel.app/success",
-        failure: "https://tienda-prepizzas.vercel.app/failure",
-        pending: "https://tienda-prepizzas.vercel.app/pending",
+        success: "https://prepizzas.vercel.app/success",
+        failure: "https://prepizzas.vercel.app//failure",
+        pending: "https://prepizzas.vercel.app/pending",
       },
       auto_return: "approved",
       external_reference: phoneNumber.toString(), // Usar el número de teléfono como referencia externa
