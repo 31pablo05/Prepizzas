@@ -1,6 +1,6 @@
 // api/proxy.js
 export default async function handler(req, res) {
-    // Manejo de la solicitud preflight (OPTIONS)
+    // Manejo de solicitud preflight (OPTIONS)
     if (req.method === "OPTIONS") {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
@@ -15,14 +15,26 @@ export default async function handler(req, res) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(req.body)
       });
-      const data = await googleResponse.text();
   
-      // Agregamos los headers CORS en la respuesta del proxy
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.status(googleResponse.status).send(data);
+      // Leemos la respuesta como texto
+      const text = await googleResponse.text();
+  
+      // Intentamos parsear el texto a JSON
+      let data;
+      try {
+        data = JSON.parse(text);
+        // Si se parseó correctamente, enviamos la respuesta en formato JSON
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        return res.status(googleResponse.status).json(data);
+      } catch (parseError) {
+        // Si la respuesta no es JSON, la enviamos tal cual
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        return res.status(googleResponse.status).send(text);
+      }
     } catch (error) {
       console.error("Error en el proxy:", error);
-      res.status(500).json({ error: "Error en la conexión con el backend" });
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      return res.status(500).json({ error: "Error en la conexión con el backend" });
     }
   }
   
