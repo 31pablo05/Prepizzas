@@ -8,7 +8,7 @@ import PaymentTransfer from './PaymentTransfer';
 const OrderForm = ({ onSubmit }) => {
   const [order, setOrder] = useState({
     name: '',
-    email: '',    // Campo email agregado
+    email: '',
     phone: '',
     quantity: 1,
     date: '',
@@ -16,7 +16,7 @@ const OrderForm = ({ onSubmit }) => {
     delivery: 'recoger', // 'recoger' o 'envio'
   });
   const [totalPrice, setTotalPrice] = useState(2000);
-  const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago' o 'efectivo'
+  const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago', 'efectivo' o 'transferencia'
 
   // Recalcular el precio total según cantidad y tipo de entrega
   useEffect(() => {
@@ -34,12 +34,9 @@ const OrderForm = ({ onSubmit }) => {
     try {
       const response = await fetch("https://tiendaprepizzas.onrender.com/api/create_preference", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ order }),
       });
-      
       const data = await response.json();
       if (data.init_point) {
         // Redirige a la URL de pago de MercadoPago
@@ -63,56 +60,54 @@ const OrderForm = ({ onSubmit }) => {
       alert("Por favor, completa los campos obligatorios: Nombre, Email, Teléfono y Fecha.");
       return;
     }
-     // Validar formato del teléfono
-  const phoneRegex = /^[0-9]{7,15}$/;
-  if (!phoneRegex.test(order.phone)) {
-    alert("El número de teléfono no es válido.");
-    return;
-  }
+
+    // Validar formato del teléfono
+    const phoneRegex = /^[0-9]{7,15}$/;
+    if (!phoneRegex.test(order.phone)) {
+      alert("El número de teléfono no es válido.");
+      return;
+    }
+
     // Validar que la fecha sea al menos un día después de hoy
-  const selectedDate = new Date(order.date);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Eliminar horas para comparar solo fechas
-  const minDate = new Date(today);
-  minDate.setDate(minDate.getDate() + 1);
+    const selectedDate = new Date(order.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 1);
+    if (selectedDate < minDate) {
+      alert("La fecha de entrega debe ser, al menos, un día después de hoy.");
+      return;
+    }
 
-  if (selectedDate < minDate) {
-    alert("La fecha de entrega debe ser, al menos, un día después de hoy.");
-    return;
-  }
+    // Validar cantidad de prepizzas (mínimo 2, máximo 20)
+    if (order.quantity < 2 || order.quantity > 20) {
+      alert("La cantidad de prepizzas debe ser entre 2 y 20.");
+      return;
+    }
 
-     // Validar cantidad de prepizzas (mínimo 2, máximo 20)
-  if (order.quantity < 2 || order.quantity > 20) {
-    alert("La cantidad de prepizzas debe ser entre 2 y 20.");
-    return;
-  }
     // Validar dirección si la entrega es por envío
     if (order.delivery === "envio" && !order.address) {
       alert("Por favor, ingresa la dirección para el envío.");
       return;
     }
 
+    // Procesar según el método de pago
     if (paymentMethod === "efectivo") {
-      // Enviar pedido para pago en efectivo
       onSubmit(order);
-       // Llamada a Sheets para registrar el pedido:
-    await sendOrderToSheet({
-      name: order.name,
-      email: order.email,
-      phone: order.phone,
-      quantity: order.quantity,
-      date: order.date,
-      address: order.address,
-      delivery: order.delivery,
-      total: totalPrice,
-      estadoPago: "pendiente"
-    }); 
-
+      await sendOrderToSheet({
+        name: order.name,
+        email: order.email,
+        phone: order.phone,
+        quantity: order.quantity,
+        date: order.date,
+        address: order.address,
+        delivery: order.delivery,
+        total: totalPrice,
+        estadoPago: "pendiente"
+      });
     } else if (paymentMethod === "mercadopago") {
-      // Procesar pago con MercadoPago
       await handleMercadopagoPayment();
     } else if (paymentMethod === "transferencia") {
-      // Si usas transferencia, también podrías guardar el pedido en Sheets
       onSubmit(order);
       await sendOrderToSheet({
         name: order.name,
@@ -135,10 +130,15 @@ const OrderForm = ({ onSubmit }) => {
     <div className="relative min-h-screen flex flex-col items-center justify-center">
       {/* Fondo */}
       <div className="absolute inset-0">
-        <img src="/assets/background.webp" alt="Fondo" className="w-full h-full object-cover" />
+        <img
+          src="/assets/background.webp"
+          alt="Fondo"
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
 
+      {/* Contenedor del formulario */}
       <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-30 rounded-lg shadow-md animate-fadeIn">
         <h2 className="text-2xl font-bold text-center mb-6">Realiza tu Pedido</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -150,7 +150,7 @@ const OrderForm = ({ onSubmit }) => {
               value={order.name}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2 rounded-md"
+              className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -161,7 +161,7 @@ const OrderForm = ({ onSubmit }) => {
               value={order.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2 rounded-md"
+              className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -172,7 +172,7 @@ const OrderForm = ({ onSubmit }) => {
               value={order.phone}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2 rounded-md"
+              className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -184,9 +184,11 @@ const OrderForm = ({ onSubmit }) => {
               onChange={handleChange}
               min="1"
               required
-              className="mt-1 block w-full border p-2 rounded-md"
+              className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="mt-1 text-sm text-gray-600">Precio total: ${totalPrice.toLocaleString()}</p>
+            <p className="mt-1 text-sm text-gray-600">
+              Precio total: ${totalPrice.toLocaleString()}
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Fecha de entrega/recogida</label>
@@ -196,7 +198,7 @@ const OrderForm = ({ onSubmit }) => {
               value={order.date}
               onChange={handleChange}
               required
-              className="mt-1 block w-full border p-2 rounded-md"
+              className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -205,7 +207,7 @@ const OrderForm = ({ onSubmit }) => {
               name="delivery"
               value={order.delivery}
               onChange={handleChange}
-              className="mt-1 block w-full border p-2 rounded-md"
+              className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="recoger">Recoger en local</option>
               <option value="envio">Envío a domicilio (+$1000)</option>
@@ -220,24 +222,25 @@ const OrderForm = ({ onSubmit }) => {
                 value={order.address}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full border p-2 rounded-md"
+                className="mt-1 block w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           )}
 
           {/* Componente de selección de método de pago */}
-          <PaymentOptions setPaymentMethod={setPaymentMethod} />
+          <PaymentOptions paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
 
-            {/* Si el método de pago es transferencia, se muestra el componente para instrucciones */}
-            {paymentMethod === "transferencia" && <PaymentTransfer order={order} />}
 
-          <button type="submit" className="w-full bg-green-500 text-white py-2 rounded mt-4">
-            {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
-          </button>
+          {/* Si el método de pago es transferencia, se muestran instrucciones adicionales */}
+          {paymentMethod === "transferencia" && <PaymentTransfer order={order} />}
+
+          <button type="submit" className="w-full bg-green-500 text-white py-2 rounded mt-4 transition-colors hover:bg-green-600">
+  {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
+</button>
         </form>
       </div>
 
-      <div className="relative z-10 w-full max-w-lg mt-6">
+      <div className="relative z-10 w-full max-w-lg mt-6 mx-4">
         <Contact />
       </div>
     </div>
