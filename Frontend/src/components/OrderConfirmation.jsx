@@ -5,7 +5,7 @@ const OrderConfirmation = ({ order, onNewOrder }) => {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gray-100">
       <div className="absolute inset-0">
-        <img src="/assets/PreparandoOrden.png" alt="Confirmación" className="w-full h-full object-cover" />
+        <img src="/assets/webp/PreparandoOrden.webp" alt="Confirmación" className="w-full h-full object-cover" />
       </div>
       <div className="relative z-10 max-w-md mx-auto p-8 bg-white rounded-xl shadow-2xl">
         <h2 className="text-3xl font-bold text-center text-green-600 mb-6">Pedido Confirmado</h2>

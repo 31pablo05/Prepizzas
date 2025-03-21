@@ -6,7 +6,7 @@ const LandingPage = ({ onStart }) => {
       {/* Imagen de fondo con z-index negativo y animación de zoom */}
       <div className="absolute inset-0 -z-20">
         <img 
-          src="/assets/fondoprepizza.png" 
+          src="/assets/webp/fondoprepizza.webp" 
           alt="Fondo de Prepizzas" 
           className="w-full h-full object-cover object-center animate-zoomIn"
         />
