@@ -9,25 +9,24 @@ export default async function handler(req, res) {
     }
   
     try {
-      // Realizamos la petición al endpoint de Google Apps Script
-      const googleResponse = await fetch("https://script.google.com/macros/s/AKfycbygeiUR3ujZQNsjiUBeRRoLMrfSeGma0Omg7JAbm5JY8aNWkowzfgLFO2SFt96923o/exec", {
+      // Realiza la petición al endpoint de Google Apps Script
+      const googleResponse = await fetch("https://script.google.com/macros/s/AKfycbxjT1Jndwhdap16l9nCKikVjOaCOWSAWXPx6MOGcFWysc-YcYj-Psmp7hOjB5mj/exec", {
         method: req.method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(req.body)
       });
   
-      // Leemos la respuesta como texto
+      // Lee la respuesta como texto
       const text = await googleResponse.text();
   
-      // Intentamos parsear el texto a JSON
+      // Intenta parsear el texto a JSON
       let data;
       try {
         data = JSON.parse(text);
-        // Si se parseó correctamente, enviamos la respuesta en formato JSON
         res.setHeader("Access-Control-Allow-Origin", "*");
         return res.status(googleResponse.status).json(data);
       } catch (parseError) {
-        // Si la respuesta no es JSON, la enviamos tal cual
+        // Si la respuesta no es JSON, la envía tal cual
         res.setHeader("Access-Control-Allow-Origin", "*");
         return res.status(googleResponse.status).send(text);
       }
