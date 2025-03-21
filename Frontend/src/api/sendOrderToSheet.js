@@ -1,7 +1,7 @@
 // src/api/sendOrderToSheet.js
 export const sendOrderToSheet = async (orderData) => {
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbxsUuUp9kEIUfTerZiX08rVVLMYuOZR3UPAQC7L9wuugYZ84s_o8WkPiiK6APPTs2c/exec", {  // Reemplaza con el URL de tu web app
+      const response = await fetch("https://script.google.com/macros/s/AKfycbyNiy78wleML4Z2Zmx4yVooyX1aHvaeQgSLSjvwS7rjYr6svuoEWjxyVCsRMm_SzMo/exec", {  // Reemplaza con el URL de tu web app
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
