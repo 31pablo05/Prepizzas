@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PaymentOptions from './PaymentOptions';
 import Contact from './Contact';
 import { sendOrderToSheet } from '../api/sendOrderToSheet';
-import PaymentTransferModal from './PaymentTransferModal';
+import OrderConfirmation from './OrderConfirmation';
 
 const OrderForm = ({ onSubmit }) => {
   const [order, setOrder] = useState({
@@ -17,7 +17,7 @@ const OrderForm = ({ onSubmit }) => {
   });
   const [totalPrice, setTotalPrice] = useState(2000);
   const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago', 'efectivo' o 'transferencia'
-  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
 
   // Recalcular el precio total según cantidad y tipo de entrega
   useEffect(() => {
@@ -40,7 +40,6 @@ const OrderForm = ({ onSubmit }) => {
       });
       const data = await response.json();
       if (data.init_point) {
-        // Redirige a la URL de pago de MercadoPago
         window.location.href = data.init_point;
       } else {
         console.error("Error al crear la preferencia de pago:", data.error);
@@ -94,28 +93,44 @@ const OrderForm = ({ onSubmit }) => {
 
     // Procesar según el método de pago
     if (paymentMethod === "efectivo") {
-      // Se registra el pedido y se muestra la confirmación
       await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: "pendiente" });
       onSubmit(order);
       alert("Pedido enviado. Gracias por tu compra.");
     } else if (paymentMethod === "mercadopago") {
       await handleMercadopagoPayment();
     } else if (paymentMethod === "transferencia") {
-      // Envío de la orden, pero no se llama a onSubmit de inmediato
+      // Enviar la orden y luego mostrar la confirmación con las instrucciones de transferencia
       await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: "pendiente" });
-      // Se muestra el modal con las instrucciones de transferencia
-      setShowTransferModal(true);
+      setOrderSubmitted(true);
     } else {
       alert("Por favor, selecciona un método de pago.");
     }
   };
 
-  // Esta función se llama cuando el usuario finaliza la transferencia desde el modal
-  const handleTransferFinish = () => {
-    setShowTransferModal(false);
-    onSubmit(order);
-    alert("Pedido confirmado. Gracias por tu compra.");
-  };
+  // Si el pedido ya fue enviado, se muestra la confirmación
+  if (orderSubmitted) {
+    return (
+      <OrderConfirmation 
+        order={order} 
+        onNewOrder={() => {
+          // Reiniciamos el formulario para un nuevo pedido
+          setOrder({
+            name: '',
+            email: '',
+            phone: '',
+            quantity: 1,
+            date: '',
+            address: '',
+            delivery: 'recoger',
+          });
+          setPaymentMethod(null);
+          setOrderSubmitted(false);
+          onSubmit(null); // o la lógica necesaria para reiniciar la vista
+        }}
+        paymentMethod={paymentMethod}
+      />
+    );
+  }
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center">
@@ -236,15 +251,6 @@ const OrderForm = ({ onSubmit }) => {
       <div className="relative z-10 w-full max-w-lg mt-6 mx-4">
         <Contact />
       </div>
-
-      {/* Modal para instrucciones de transferencia */}
-      {showTransferModal && (
-        <PaymentTransferModal
-          order={order}
-          onClose={() => setShowTransferModal(false)}
-          onFinishPayment={handleTransferFinish}
-        />
-      )}
     </div>
   );
 };
