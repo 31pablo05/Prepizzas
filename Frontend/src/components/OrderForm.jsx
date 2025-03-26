@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PaymentOptions from './PaymentOptions';
 import Contact from './Contact';
 import { sendOrderToSheet } from '../api/sendOrderToSheet';
-import PaymentTransfer from './PaymentTransfer';
+import PaymentTransferModal from './PaymentTransferModal';
 
 const OrderForm = ({ onSubmit }) => {
   const [order, setOrder] = useState({
@@ -17,6 +17,7 @@ const OrderForm = ({ onSubmit }) => {
   });
   const [totalPrice, setTotalPrice] = useState(2000);
   const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago', 'efectivo' o 'transferencia'
+  const [showTransferModal, setShowTransferModal] = useState(false);
 
   // Recalcular el precio total según cantidad y tipo de entrega
   useEffect(() => {
@@ -55,7 +56,7 @@ const OrderForm = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar campos obligatorios, incluyendo el email
+    // Validar campos obligatorios
     if (!order.name || !order.email || !order.phone || !order.date) {
       alert("Por favor, completa los campos obligatorios: Nombre, Email, Teléfono y Fecha.");
       return;
@@ -68,7 +69,7 @@ const OrderForm = ({ onSubmit }) => {
       return;
     }
 
-    // Validar que la fecha sea al menos un día después de hoy
+    // Validar fecha mínima (al menos un día después de hoy)
     const selectedDate = new Date(order.date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -79,13 +80,13 @@ const OrderForm = ({ onSubmit }) => {
       return;
     }
 
-    // Validar cantidad de prepizzas (mínimo 2, máximo 20)
+    // Validar cantidad (mínimo 2, máximo 20)
     if (order.quantity < 2 || order.quantity > 20) {
       alert("La cantidad de prepizzas debe ser entre 2 y 20.");
       return;
     }
 
-    // Validar dirección si la entrega es por envío
+    // Validar dirección si es envío
     if (order.delivery === "envio" && !order.address) {
       alert("Por favor, ingresa la dirección para el envío.");
       return;
@@ -93,37 +94,27 @@ const OrderForm = ({ onSubmit }) => {
 
     // Procesar según el método de pago
     if (paymentMethod === "efectivo") {
+      // Se registra el pedido y se muestra la confirmación
+      await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: "pendiente" });
       onSubmit(order);
-      await sendOrderToSheet({
-        name: order.name,
-        email: order.email,
-        phone: order.phone,
-        quantity: order.quantity,
-        date: order.date,
-        address: order.address,
-        delivery: order.delivery,
-        total: totalPrice,
-        estadoPago: "pendiente"
-      });
+      alert("Pedido enviado. Gracias por tu compra.");
     } else if (paymentMethod === "mercadopago") {
       await handleMercadopagoPayment();
     } else if (paymentMethod === "transferencia") {
-      onSubmit(order);
-      await sendOrderToSheet({
-        name: order.name,
-        email: order.email,
-        phone: order.phone,
-        quantity: order.quantity,
-        date: order.date,
-        address: order.address,
-        delivery: order.delivery,
-        total: totalPrice,
-        estadoPago: "pendiente"
-      });
-      alert("Pedido enviado. Realizá la transferencia y envía el comprobante por WhatsApp.");
+      // Envío de la orden, pero no se llama a onSubmit de inmediato
+      await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: "pendiente" });
+      // Se muestra el modal con las instrucciones de transferencia
+      setShowTransferModal(true);
     } else {
       alert("Por favor, selecciona un método de pago.");
     }
+  };
+
+  // Esta función se llama cuando el usuario finaliza la transferencia desde el modal
+  const handleTransferFinish = () => {
+    setShowTransferModal(false);
+    onSubmit(order);
+    alert("Pedido confirmado. Gracias por tu compra.");
   };
 
   return (
@@ -140,12 +131,12 @@ const OrderForm = ({ onSubmit }) => {
 
       {/* Contenedor del formulario */}
       <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-10 rounded-lg shadow-md animate-fadeIn">
-      <h2 className="text-3xl font-extrabold text-center mb-6 
-  bg-gradient-to-r from-green-600 to-green-400 text-transparent bg-clip-text 
-  drop-shadow-md animate-fade-in"
->
-  Realiza tu Pedido
-</h2>
+        <h2 className="text-3xl font-extrabold text-center mb-6 
+          bg-gradient-to-r from-green-600 to-green-400 text-transparent bg-clip-text 
+          drop-shadow-md animate-fade-in"
+        >
+          Realiza tu Pedido
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -233,22 +224,27 @@ const OrderForm = ({ onSubmit }) => {
             </div>
           )}
 
-          {/* Componente de selección de método de pago */}
+          {/* Selección del método de pago */}
           <PaymentOptions paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
 
-
-          {/* Si el método de pago es transferencia, se muestran instrucciones adicionales */}
-          {paymentMethod === "transferencia" && <PaymentTransfer order={order} />}
-
           <button type="submit" className="w-full bg-green-500 text-white py-2 rounded mt-4 transition-colors hover:bg-green-600">
-  {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
-</button>
+            {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
+          </button>
         </form>
       </div>
 
       <div className="relative z-10 w-full max-w-lg mt-6 mx-4">
         <Contact />
       </div>
+
+      {/* Modal para instrucciones de transferencia */}
+      {showTransferModal && (
+        <PaymentTransferModal
+          order={order}
+          onClose={() => setShowTransferModal(false)}
+          onFinishPayment={handleTransferFinish}
+        />
+      )}
     </div>
   );
 };

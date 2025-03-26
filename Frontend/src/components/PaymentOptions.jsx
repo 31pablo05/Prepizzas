@@ -22,23 +22,11 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
           onClick={() => setPaymentMethod("transferencia")}
           className={`py-2 px-4 rounded ${
             paymentMethod === "transferencia"
-              ? "bg-green-700 text-white border-2 border-green-900"
-              : "bg-green-500 text-white"
+              ? "bg-blue-700 text-white border-2 border-blue-900"
+              : "bg-blue-500 text-white"
           }`}
         >
           Pagar por Transferencia
-        </button>
-        <button
-          type="button"
-          onClick={() => setPaymentMethod("mercadopago")}
-          className={`py-2 px-4 rounded ${
-            paymentMethod === "mercadopago"
-              ? "bg-yellow-700 text-white border-2 border-yellow-900"
-              : "bg-yellow-500 text-white"
-          }`}
-          title="Pago con tarjeta: se redirigirá a MercadoPago (apretar 'Procesar Pago' abajo)"
-        >
-          Pagar con MercadoPago
         </button>
       </div>
       {paymentMethod && (
