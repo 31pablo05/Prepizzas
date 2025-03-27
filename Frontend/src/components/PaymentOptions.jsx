@@ -1,4 +1,3 @@
-// src/components/PaymentOptions.jsx
 import React from 'react';
 
 const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
@@ -9,7 +8,7 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
         <button
           type="button"
           onClick={() => setPaymentMethod("efectivo")}
-          className={`py-2 px-4 rounded ${
+          className={`py-2 px-4 rounded w-full sm:w-auto ${
             paymentMethod === "efectivo"
               ? "bg-blue-700 text-white border-2 border-blue-900"
               : "bg-blue-500 text-white"
@@ -20,13 +19,35 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
         <button
           type="button"
           onClick={() => setPaymentMethod("transferencia")}
-          className={`py-2 px-4 rounded ${
+          className={`py-2 px-4 rounded w-full sm:w-auto ${
             paymentMethod === "transferencia"
               ? "bg-blue-700 text-white border-2 border-blue-900"
               : "bg-blue-500 text-white"
           }`}
         >
           Pagar por Transferencia
+        </button>
+        <button
+          type="button"
+          onClick={() => setPaymentMethod("mercadopago")}
+          className={`py-2 px-4 rounded w-full sm:w-auto flex items-center justify-center gap-2 ${
+            paymentMethod === "mercadopago"
+              ? "bg-yellow-700 text-white border-2 border-yellow-900"
+              : "bg-yellow-500 text-white"
+          }`}
+          title="Pago con tarjeta: se redirigirá a MercadoPago (apretar 'Procesar Pago' abajo)"
+        >
+          <img
+            src="/assets/ico/mercadopago2.png"
+            alt="MercadoPago"
+            className="h-8 w-8 sm:h-12 sm:w-12"
+          />
+          <span className="text-sm sm:text-base">Pagar con Tarjeta</span>
+          <img
+            src="/assets/ico/tarjeta-de-debito.png"
+            alt="Tarjetas"
+            className="h-8 w-8 sm:h-12 sm:w-12"
+          />
         </button>
       </div>
       {paymentMethod && (
