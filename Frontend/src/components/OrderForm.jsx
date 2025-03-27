@@ -68,16 +68,19 @@ const OrderForm = ({ onSubmit }) => {
       return;
     }
 
-    // Validar fecha mínima (al menos un día después de hoy)
-    const selectedDate = new Date(order.date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-     // Verificar que la fecha seleccionada no esté en el pasado
-  if (selectedDate < today) {
-    alert("La fecha de entrega no puede ser en el pasado.");
-    return;
-  }
+   // Obtener la fecha seleccionada por el usuario
+const selectedDate = new Date(order.date + "T00:00:00"); // Forzar el inicio del día
+
+// Obtener la fecha de hoy sin horas (para comparar solo la fecha)
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+// Verificar que la fecha seleccionada no esté en el pasado
+if (selectedDate < today) {
+  alert("La fecha de entrega no puede ser en el pasado.");
+  return;
+}
+
 
     // Validar cantidad (mínimo 1, máximo 20)
     if (order.quantity < 1 || order.quantity > 20) {
