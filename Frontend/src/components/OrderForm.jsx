@@ -72,18 +72,24 @@ const OrderForm = ({ onSubmit }) => {
     const selectedDate = new Date(order.date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() + 1);
-    if (selectedDate < minDate) {
-      alert("La fecha de entrega debe ser, al menos, un día después de hoy.");
+    
+     // Verificar que la fecha seleccionada no esté en el pasado
+  if (selectedDate < today) {
+    alert("La fecha de entrega no puede ser en el pasado.");
+    return;
+  }
+
+    // Validar cantidad (mínimo 1, máximo 20)
+    if (order.quantity < 1 || order.quantity > 20) {
+      alert("La cantidad de prepizzas debe ser entre 1 y 20.");
       return;
     }
 
-    // Validar cantidad (mínimo 2, máximo 20)
-    if (order.quantity < 2 || order.quantity > 20) {
-      alert("La cantidad de prepizzas debe ser entre 2 y 20.");
-      return;
-    }
+    // Si se piden más de 6 prepizzas, la entrega debe ser para un día futuro (al menos con 24 hs de anticipación)
+  if (order.quantity > 6 && selectedDate.getTime() === today.getTime()) {
+    alert("Para pedidos de más de 6 prepizzas, la fecha de entrega debe ser, al menos, un día después de hoy.");
+    return;
+  }
 
     // Validar dirección si es envío
     if (order.delivery === "envio" && !order.address) {
@@ -242,9 +248,13 @@ const OrderForm = ({ onSubmit }) => {
           {/* Selección del método de pago */}
           <PaymentOptions paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
 
-          <button type="submit" className="w-full bg-green-500 text-white py-2 rounded mt-4 transition-colors hover:bg-green-600">
-            {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
-          </button>
+          <button 
+  type="submit" 
+  className="w-full bg-green-500 text-white py-3 px-6 text-xl font-bold rounded-lg mt-4 transition-colors hover:bg-green-600"
+>
+  {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
+</button>
+
         </form>
       </div>
 
