@@ -1,28 +1,23 @@
-// src/components/PaymentMercadoPago.jsx
 import React from 'react';
 
-const PaymentMercadoPago = () => {
+const PaymentMercadoPago = ({ order }) => {
   const handleMercadoPagoPayment = async () => {
     try {
-      // Aquí debes enviar la información necesaria para crear la preferencia de pago.
-      // Si no necesitas datos de pedido (order) en este botón, puedes enviar un objeto vacío
-      // o con la información mínima requerida por tu API.
-      const orderData = {}; // Ajusta según tus necesidades
-
+      // Enviar el objeto order completo a la API
       const response = await fetch("https://tiendaprepizzas.onrender.com/api/create_preference", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order: orderData }),
+        body: JSON.stringify({ order }),
       });
       const data = await response.json();
       if (data.init_point) {
         window.location.href = data.init_point;
       } else {
-        console.error("Error al crear la preferencia:", data.error);
-        alert("Hubo un error al procesar el pago con MercadoPago.");
+        console.error("Error al crear la preferencia de pago:", data.error);
+        alert("Hubo un error al procesar el pago con MercadoPago. Intenta de nuevo.");
       }
     } catch (error) {
-      console.error("Error en la conexión:", error);
+      console.error("Error en la conexión con la API:", error);
       alert("Error de conexión. Verifica tu red.");
     }
   };
