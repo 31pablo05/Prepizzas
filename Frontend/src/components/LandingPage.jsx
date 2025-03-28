@@ -1,39 +1,13 @@
-import React, { useRef, useState } from "react";
+// src/components/LandingPage.jsx
+import React from "react";
 
 const LandingPage = ({ onStart }) => {
-  const audioRef = useRef(null);
-  const [audioPlayed, setAudioPlayed] = useState(false);
-
   const handleClick = () => {
-    if (!audioPlayed && audioRef.current) {
-      console.log("Intentando reproducir el audio...");
-      setAudioPlayed(true);
-      audioRef.current.currentTime = 0;
-      audioRef.current.volume = 1;
-
-      // Intentar reproducir el audio directamente
-      audioRef.current.play()
-        .then(() => {
-          console.log("Audio reproduciéndose...");
-        })
-        .catch((error) => {
-          console.error("Error al reproducir el audio:", error);
-        });
-    }
     onStart();
   };
 
   return (
     <div className="min-h-screen relative flex flex-col justify-center items-center overflow-hidden">
-      {/* Audio oculto */}
-      <audio 
-        ref={audioRef} 
-        src="/assets/audio/Yallegaronlaspiphaz.mp3" 
-        preload="auto"
-        onCanPlay={() => console.log("Audio cargado y listo para reproducir")}
-        onError={(e) => console.error("Error al cargar el audio:", e)}
-      />
-
       {/* Imagen de fondo */}
       <div className="absolute inset-0 -z-20 animate-fadeInSlow">
         <img
