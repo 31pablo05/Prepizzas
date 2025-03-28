@@ -102,14 +102,14 @@ if (selectedDate < today) {
 
     // Procesar según el método de pago
     if (paymentMethod === "efectivo") {
-      await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: "pendiente" });
+      await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: paymentMethod    });
       onSubmit(order);
       alert("Pedido enviado. Gracias por tu compra.");
     } else if (paymentMethod === "mercadopago") {
       await handleMercadopagoPayment();
     } else if (paymentMethod === "transferencia") {
       // Enviar la orden y luego mostrar la confirmación con las instrucciones de transferencia
-      await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: "pendiente" });
+      await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: paymentMethod  });
       setOrderSubmitted(true);
     } else {
       alert("Por favor, selecciona un método de pago.");
@@ -134,7 +134,7 @@ if (selectedDate < today) {
           });
           setPaymentMethod(null);
           setOrderSubmitted(false);
-          onSubmit(null); // o la lógica necesaria para reiniciar la vista
+         // onSubmit(null);  o la lógica necesaria para reiniciar la vista
         }}
         paymentMethod={paymentMethod}
       />
@@ -253,10 +253,11 @@ if (selectedDate < today) {
 
           <button 
   type="submit" 
-  className="w-full bg-green-500 text-white py-3 px-6 text-xl font-bold rounded-lg mt-4 transition-colors hover:bg-green-600"
+  className="w-full max-w-lg bg-green-500 text-white py-3 px-6 text-xl font-bold rounded-lg mt-4 transition-colors hover:bg-green-600"
 >
   {paymentMethod === "mercadopago" ? "Procesar Pago" : "Enviar Pedido"}
 </button>
+
 
         </form>
       </div>

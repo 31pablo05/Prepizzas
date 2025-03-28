@@ -33,7 +33,7 @@ const OrderConfirmation = ({ order, onNewOrder, paymentMethod }) => {
           {order.delivery === "envio" ? (
             <li><strong>Dirección de envío:</strong> {order.address}</li>
           ) : (
-            <li><strong>Retiro en:</strong> Brown 311</li>
+            <li><strong>Podes Retirar tu pedido en:</strong> Brown 311</li>
           )}
           <li className="text-lg font-semibold text-green-700">
             <strong>Total a transferir:</strong> ${totalPrice.toLocaleString()}
