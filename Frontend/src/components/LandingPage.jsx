@@ -18,7 +18,7 @@ const LandingPage = ({ onStart }) => {
       </div>
 
       {/* Capa de gradiente */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black via-transparent to-black opacity-70 transition-opacity duration-700"></div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black via-transparent to-black opacity-20 transition-opacity duration-700"></div>
 
       {/* Contenido principal */}
       <div className="relative z-10 bg-black bg-opacity-50 p-6 sm:p-8 md:p-12 rounded-lg text-center animate-slideUp shadow-lg">
