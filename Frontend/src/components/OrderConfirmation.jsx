@@ -4,7 +4,7 @@ import PaymentTransfer from './PaymentTransfer';
 
 const OrderConfirmation = ({ order, onNewOrder, paymentMethod }) => {
   // Definir precios
-  const precioUnitario = 2000; // Precio por prepizza
+  const precioUnitario = 1500; // Precio por prepizza
   const costoEnvio = 1000; // Costo de envío si aplica
 
   // Calcular total

@@ -42,7 +42,7 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
             alt="MercadoPago"
             className="h-8 w-8 sm:h-12 sm:w-12"
           />
-          <span className="text-sm sm:text-base">Pagar con Tarjeta</span>
+          <span className="text-sm sm:text-base">Pagar con Tarjeta de credito</span>
           <img
             src="/assets/ico/tarjeta-de-debito.png"
             alt="Tarjetas"

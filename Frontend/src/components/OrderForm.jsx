@@ -15,13 +15,13 @@ const OrderForm = ({ onSubmit }) => {
     address: '',
     delivery: 'recoger', // 'recoger' o 'envio'
   });
-  const [totalPrice, setTotalPrice] = useState(2000);
+  const [totalPrice, setTotalPrice] = useState(1500);
   const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago', 'efectivo' o 'transferencia'
   const [orderSubmitted, setOrderSubmitted] = useState(false);
 
   // Recalcular el precio total según cantidad y tipo de entrega
   useEffect(() => {
-    let price = order.quantity * 2000;
+    let price = order.quantity * 1500;
     if (order.delivery === 'envio') price += 1000;
     setTotalPrice(price);
   }, [order.quantity, order.delivery]);
@@ -83,7 +83,7 @@ if (selectedDate < today) {
 
 
     // Validar cantidad (mínimo 1, máximo 20)
-    if (order.quantity < 1 || order.quantity > 20) {
+    if (order.quantity < 1 || order.quantity > 40) {
       alert("La cantidad de prepizzas debe ser entre 1 y 20.");
       return;
     }
