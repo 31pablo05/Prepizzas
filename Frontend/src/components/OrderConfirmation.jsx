@@ -36,7 +36,7 @@ const OrderConfirmation = ({ order, onNewOrder, paymentMethod }) => {
             <li><strong>Podes Retirar tu pedido en:</strong> Brown 311</li>
           )}
           <li className="text-lg font-semibold text-green-700">
-            <strong>Total a transferir:</strong> ${totalPrice.toLocaleString()}
+            <strong>Total a Pagar:</strong> ${totalPrice.toLocaleString()}
           </li>
         </ul>
 
