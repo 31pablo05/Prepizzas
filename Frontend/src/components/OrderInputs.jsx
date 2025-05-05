@@ -4,7 +4,7 @@ import React from 'react';
 const OrderInputs = ({ order, handleChange, totalPrice }) => (
   <>
     <div>
-      <label className="block text-lg font-medium text-black-700">Nombre</label>
+      <label className="block text-lg font-medium text-black-700">Nombre y apellido</label>
       <input
         type="text"
         name="name"
@@ -28,7 +28,7 @@ const OrderInputs = ({ order, handleChange, totalPrice }) => (
     </div>
 
     <div>
-      <label className="block text-lg font-medium text-black-700">Teléfono</label>
+      <label className="block text-lg font-medium text-black-700">Celular </label>
       <input
         type="text"
         name="phone"
