@@ -1,7 +1,13 @@
+// src/hooks/useOrderValidation.js
 import { useState } from 'react';
 import { sendOrderToSheet } from '../api/sendOrderToSheet';
 
-export const useOrderValidation = ({ order, paymentMethod, totalPrice, onSubmit, handleMercadopagoPayment }) => {
+export const useOrderValidation = ({
+  order,
+  paymentMethod,
+  totalPrice,
+  handleMercadopagoPayment
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [orderSubmitted, setOrderSubmitted] = useState(false);
 
@@ -10,36 +16,28 @@ export const useOrderValidation = ({ order, paymentMethod, totalPrice, onSubmit,
       alert("Completa Nombre, Email, Teléfono y Fecha.");
       return false;
     }
-
     if (!/^[0-9]{7,15}$/.test(order.phone)) {
       alert("Teléfono inválido.");
       return false;
     }
-
     const selectedDate = new Date(order.date + "T00:00:00");
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     if (selectedDate < today) {
       alert("La fecha no puede ser en el pasado.");
       return false;
     }
-
     if (order.quantity < 1 || order.quantity > 40) {
       alert("Cantidad entre 1 y 40.");
       return false;
     }
-
     if (order.quantity > 6 && selectedDate.getTime() === today.getTime()) {
       alert("Para más de 6, debe ser un día posterior.");
       return false;
     }
-
     if (order.delivery === "envio" && !order.address) {
       alert("Ingresa la dirección de envío.");
       return false;
     }
-
     return true;
   };
 
@@ -47,18 +45,21 @@ export const useOrderValidation = ({ order, paymentMethod, totalPrice, onSubmit,
     e.preventDefault();
     if (isLoading) return;
     setIsLoading(true);
-
     if (!validateOrder()) {
       setIsLoading(false);
       return;
     }
-
     try {
       if (paymentMethod === "efectivo" || paymentMethod === "transferencia") {
-        await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: paymentMethod });
-        
-        // Unificamos flujo: mostramos solo OrderConfirmation
-        onSubmit(order);
+        try {
+          await sendOrderToSheet({
+            ...order,
+            total: totalPrice,
+            estadoPago: paymentMethod
+          });
+        } catch (apiErr) {
+          console.warn("No importa si falla Sheets:", apiErr);
+        }
         setOrderSubmitted(true);
         setIsLoading(false);
       } else if (paymentMethod === "mercadopago") {
@@ -75,5 +76,10 @@ export const useOrderValidation = ({ order, paymentMethod, totalPrice, onSubmit,
     }
   };
 
-  return { handleSubmit, isLoading, orderSubmitted, setOrderSubmitted };
+  return {
+    handleSubmit,
+    isLoading,
+    orderSubmitted,
+    setOrderSubmitted
+  };
 };

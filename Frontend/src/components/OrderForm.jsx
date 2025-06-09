@@ -8,7 +8,7 @@ import DeliveryDetails from './DeliveryDetails';
 import SubmitButton from './SubmitButton';
 import { useOrderValidation } from '../hooks/useOrderValidation';
 
-const OrderForm = ({ onSubmit }) => {
+const OrderForm = () => {
   const [order, setOrder] = useState({
     name: '',
     email: '',
@@ -27,17 +27,19 @@ const OrderForm = ({ onSubmit }) => {
     setTotalPrice(price);
   }, [order]);
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setOrder({ ...order, [e.target.name]: e.target.value });
-  };
 
   const handleMercadopagoPayment = async () => {
     try {
-      const res = await fetch("https://tiendaprepizzas.onrender.com/api/create_preference", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order }),
-      });
+      const res = await fetch(
+        "https://tiendaprepizzas.onrender.com/api/create_preference",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order }),
+        }
+      );
       const data = await res.json();
       if (data.init_point) {
         window.location.href = data.init_point;
@@ -49,6 +51,7 @@ const OrderForm = ({ onSubmit }) => {
     }
   };
 
+  // Aquí invocamos el hook SIN pasarle ningún setter externo
   const {
     handleSubmit,
     isLoading,
@@ -58,9 +61,11 @@ const OrderForm = ({ onSubmit }) => {
     order,
     paymentMethod,
     totalPrice,
-    onSubmit,
-    handleMercadopagoPayment
+    handleMercadopagoPayment,
   });
+
+  // Debug en consola
+  console.log("🔍 [OrderForm] paymentMethod state:", paymentMethod);
 
   if (orderSubmitted) {
     return (
@@ -68,7 +73,15 @@ const OrderForm = ({ onSubmit }) => {
         order={order}
         paymentMethod={paymentMethod}
         onNewOrder={() => {
-          setOrder({ name: '', email: '', phone: '', quantity: 1, date: '', address: '', delivery: 'recoger' });
+          setOrder({
+            name: '',
+            email: '',
+            phone: '',
+            quantity: 1,
+            date: '',
+            address: '',
+            delivery: 'recoger',
+          });
           setPaymentMethod(null);
           setOrderSubmitted(false);
         }}
@@ -77,9 +90,13 @@ const OrderForm = ({ onSubmit }) => {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center ">
+    <div className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0">
-        <img src="/assets/background.webp" alt="Fondo" className="w-full h-full object-cover" />
+        <img
+          src="/assets/background.webp"
+          alt="Fondo"
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-black opacity-20" />
       </div>
 
@@ -89,10 +106,20 @@ const OrderForm = ({ onSubmit }) => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <OrderInputs order={order} handleChange={handleChange} totalPrice={totalPrice} />
+          <OrderInputs
+            order={order}
+            handleChange={handleChange}
+            totalPrice={totalPrice}
+          />
           <DeliveryDetails order={order} handleChange={handleChange} />
-          <PaymentOptions paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
-          <SubmitButton isLoading={isLoading} paymentMethod={paymentMethod} />
+          <PaymentOptions
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+          />
+          <SubmitButton
+            isLoading={isLoading}
+            paymentMethod={paymentMethod}
+          />
         </form>
       </div>
 
