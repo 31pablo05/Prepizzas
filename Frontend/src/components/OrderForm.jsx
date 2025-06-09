@@ -93,7 +93,7 @@ const OrderForm = () => {
     <div className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0">
         <img
-          src="/assets/background.webp"
+          src="/assets/webp/background.webp"
           alt="Fondo"
           className="w-full h-full object-cover"
         />

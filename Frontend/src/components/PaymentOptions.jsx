@@ -14,7 +14,7 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
               : "bg-blue-500 text-white"
           }`}
         >
-          Pagar en entrega
+          Pagar en efectivo
         </button>
         <button
           type="button"
@@ -38,13 +38,13 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
           title="Pago con tarjeta: se redirigirá a MercadoPago (apretar 'Procesar Pago' abajo)"
         >
           <img
-            src="/assets/ico/mercadopago2.png"
+            src="/assets/ico/mercadopago2.webp"
             alt="MercadoPago"
             className="h-8 w-8 sm:h-12 sm:w-12"
           />
           <span className="text-sm sm:text-base">Pagar con Tarjeta de credito</span>
           <img
-            src="/assets/ico/tarjeta-de-debito.png"
+            src="/assets/ico/tarjeta-de-debito.webp"
             alt="Tarjetas"
             className="h-8 w-8 sm:h-12 sm:w-12"
           />
