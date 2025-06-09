@@ -3,7 +3,7 @@ import { FaInstagram, FaFacebookF, FaLinkedinIn, FaMapMarkerAlt, FaPhoneAlt, FaE
 
 const Contact = () => {
   return (
-    <div className="w-full max-w-lg mx-auto p-6 sm:p-8 bg-white rounded-lg shadow-md mt-8">
+    <div className="w-full max-w-lg mx-auto p-6 sm:p-8 bg-white rounded-lg shadow-md mt-4">
       <div className="space-y-4 mb-6 text-left">
         <div className="flex items-center space-x-4">
           <FaMapMarkerAlt className="text-green-500 text-xl" />

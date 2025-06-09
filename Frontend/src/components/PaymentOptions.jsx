@@ -50,11 +50,14 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
           />
         </button>
       </div>
+
       {paymentMethod && (
-        <p className="mt-6 text-lg text-black-700 font-semibold">
-          Has seleccionado:{" "}
-          <span className="font-bold capitalize">{paymentMethod}</span>
-        </p>
+        <div className="mt-6 p-4 rounded-md shadow-sm bg-blue-100 border border-blue-300">
+          <p className="text-lg text-blue-900 font-semibold">
+            Has seleccionado:{" "}
+            <span className="font-bold capitalize">{paymentMethod}</span>
+          </p>
+        </div>
       )}
     </div>
   );

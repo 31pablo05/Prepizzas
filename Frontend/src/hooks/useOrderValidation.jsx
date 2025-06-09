@@ -1,4 +1,3 @@
-// src/hooks/useOrderValidation.jsx
 import { useState } from 'react';
 import { sendOrderToSheet } from '../api/sendOrderToSheet';
 
@@ -18,7 +17,8 @@ export const useOrderValidation = ({ order, paymentMethod, totalPrice, onSubmit,
     }
 
     const selectedDate = new Date(order.date + "T00:00:00");
-    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     if (selectedDate < today) {
       alert("La fecha no puede ser en el pasado.");
@@ -57,16 +57,13 @@ export const useOrderValidation = ({ order, paymentMethod, totalPrice, onSubmit,
       if (paymentMethod === "efectivo" || paymentMethod === "transferencia") {
         await sendOrderToSheet({ ...order, total: totalPrice, estadoPago: paymentMethod });
         
-        if (paymentMethod === "efectivo") {
-          onSubmit(order);
-          alert("Pedido enviado. ¡Gracias!");
-        } else {
-          setOrderSubmitted(true);
-        }
-
+        // Unificamos flujo: mostramos solo OrderConfirmation
+        onSubmit(order);
+        setOrderSubmitted(true);
         setIsLoading(false);
       } else if (paymentMethod === "mercadopago") {
         await handleMercadopagoPayment();
+        setIsLoading(false);
       } else {
         alert("Selecciona un método de pago.");
         setIsLoading(false);

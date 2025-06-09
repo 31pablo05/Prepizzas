@@ -77,15 +77,15 @@ const OrderForm = ({ onSubmit }) => {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center">
+    <div className="relative min-h-screen flex flex-col items-center justify-center ">
       <div className="absolute inset-0">
         <img src="/assets/background.webp" alt="Fondo" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black opacity-20" />
       </div>
 
-      <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-10 rounded-lg shadow-md">
-        <h2 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-green-600 to-green-400 text-transparent bg-clip-text">
-          Realiza tu Pedido
+      <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-10 rounded-lg shadow-md mt-6">
+        <h2 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-red-600 to-red-400 text-transparent bg-clip-text">
+          Hace tu Pedido
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
