@@ -36,7 +36,7 @@ app.post('/api/create_preference', async (req, res) => {
       {
         title: 'Prepizza',
         quantity: parseInt(order.quantity, 10),
-        unit_price: 2000,
+        unit_price: 1500,
         currency_id: 'ARS',
       },
     ];
