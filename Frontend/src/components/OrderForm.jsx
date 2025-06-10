@@ -93,11 +93,11 @@ const OrderForm = () => {
     <div className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0">
         <img
-          src="Frontend/public/assets/webp/background.webp"
+          src="/assets/webp/background3.webp"
           alt="Fondo"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-20" />
+        <div className="absolute inset-0 bg-black opacity-40" />
       </div>
 
       <div className="relative z-10 w-full max-w-lg mx-4 p-6 bg-white bg-opacity-10 rounded-lg shadow-md mt-6">
