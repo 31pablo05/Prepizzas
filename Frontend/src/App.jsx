@@ -13,7 +13,7 @@ function App() {
   const playAudio = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.volume = 1;
+      audioRef.current.volume = 0.5;
       audioRef.current.play()
         .then(() => {
           console.log("Audio reproduciéndose...");
