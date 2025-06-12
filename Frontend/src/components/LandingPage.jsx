@@ -67,6 +67,17 @@ const LandingPage = ({ onStart }) => {
           </motion.div>
         </motion.div>
       )}
+
+      {/* Efecto de transición al salir con desenfoque y transparencia */}
+      {startTransition && (
+        <motion.div
+          className="fixed inset-0 bg-white/10 backdrop-blur-sm z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        />
+      )}
     </AnimatePresence>
   );
 };

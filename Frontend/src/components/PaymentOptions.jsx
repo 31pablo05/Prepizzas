@@ -19,8 +19,8 @@ const PaymentOptions = ({ paymentMethod, setPaymentMethod }) => {
       animate="visible"
       className="mt-6"
     >
-      <h3 className="text-lg font-semibold mb-2 text-gray-800">
-        Elige tu método de pago:
+      <h3 className="text-lg font-semibold mb-2 text-black-800">
+        Eligi tu método de pago:
       </h3>
 
       <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">

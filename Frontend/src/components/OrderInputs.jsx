@@ -66,7 +66,7 @@ const OrderInputs = ({ order, handleChange, totalPrice }) => (
     </motion.div>
 
     <motion.div variants={fadeSlideUp} initial="hidden" animate="visible" className="mb-4">
-      <label className="block text-lg font-medium text-black-700">Fecha de entrega/recogida</label>
+      <label className="block text-lg font-medium text-black-700">Fecha de entrega</label>
       <input
         type="date"
         name="date"
@@ -86,7 +86,7 @@ const OrderInputs = ({ order, handleChange, totalPrice }) => (
         onChange={handleChange}
         className="mt-1 block w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500"
       >
-        <option value="recoger">Recoger en local</option>
+        <option value="recoger">Retirar en local</option>
         <option value="envio">Envío a domicilio (+$1000)</option>
       </select>
     </motion.div>

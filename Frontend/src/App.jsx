@@ -43,7 +43,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen">
+   <div className="min-h-screen bg-transparent">
+
       {/* Reproductor de audio global */}
       <AudioPlayer ref={audioRef} />
 
