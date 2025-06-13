@@ -1,9 +1,9 @@
-// src/App.jsx
 import React, { useState, useRef } from 'react';
 import LandingPage from './components/LandingPage';
 import OrderForm from './components/OrderForm';
 import OrderConfirmation from './components/OrderConfirmation';
 import AudioPlayer from './components/AudioPlayer';
+import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
   const [view, setView] = useState('landing'); // 'landing', 'order' o 'confirmation'
@@ -26,7 +26,6 @@ function App() {
 
   const handleStart = () => {
     playAudio();
-    // Retraso de 2 segundos antes de cambiar a la vista 'order'
     setTimeout(() => {
       setView('order');
     }, 2000);
@@ -43,14 +42,55 @@ function App() {
   };
 
   return (
-   <div className="min-h-screen bg-transparent">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Fondo fijo para evitar pantallazo blanco */}
+      <img
+        src="/assets/webp/fondoprepizza.webp"
+        alt="Fondo fijo"
+        className="fixed inset-0 w-full h-full object-cover -z-30"
+      />
+      {/* Capa oscura encima para contraste */}
+      <div className="fixed inset-0 bg-black opacity-30 -z-20"></div>
 
-      {/* Reproductor de audio global */}
       <AudioPlayer ref={audioRef} />
 
-      {view === 'landing' && <LandingPage onStart={handleStart} />}
-      {view === 'order' && <OrderForm onSubmit={handleSubmitOrder} />}
-      {view === 'confirmation' && orderData && <OrderConfirmation order={orderData} onNewOrder={handleNewOrder} />}
+      <AnimatePresence mode="wait">
+        {view === 'landing' && (
+          <motion.div
+            key="landing"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.8 }}
+          >
+            <LandingPage onStart={handleStart} />
+          </motion.div>
+        )}
+
+        {view === 'order' && (
+          <motion.div
+            key="order"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.8 }}
+          >
+            <OrderForm onSubmit={handleSubmitOrder} />
+          </motion.div>
+        )}
+
+        {view === 'confirmation' && orderData && (
+          <motion.div
+            key="confirmation"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.8 }}
+          >
+            <OrderConfirmation order={orderData} onNewOrder={handleNewOrder} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

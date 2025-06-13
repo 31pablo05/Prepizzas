@@ -1,4 +1,3 @@
-// src/components/LandingPage.jsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,7 +8,7 @@ const LandingPage = ({ onStart }) => {
     setStartTransition(true);
     setTimeout(() => {
       onStart();
-    }, 800); // esperar la salida antes de ir al siguiente paso
+    }, 1000);
   };
 
   return (
@@ -22,12 +21,13 @@ const LandingPage = ({ onStart }) => {
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Imagen de fondo con fadeIn */}
+          {/* Imagen de fondo */}
           <motion.div
             className="absolute inset-0 -z-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 2 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
           >
             <img
               src="/assets/webp/fondoprepizza.webp"
@@ -39,12 +39,13 @@ const LandingPage = ({ onStart }) => {
           {/* Capa de gradiente con blur */}
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black via-transparent to-black opacity-30 backdrop-blur-sm transition-opacity duration-700"></div>
 
-          {/* Contenido principal */}
+          {/* Contenido con fade out al salir */}
           <motion.div
-            className="relative z-10 bg-black bg-opacity-50 p-6 sm:p-8 md:p-12 rounded-lg text-center shadow-lg"
+            className="relative z-10 bg-transparent bg-opacity-50 p-6 sm:p-8 md:p-12 rounded-lg text-center shadow-lg"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.8 }}
           >
             <motion.h1
               className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-6 drop-shadow-lg"
@@ -60,7 +61,7 @@ const LandingPage = ({ onStart }) => {
               onClick={handleClick}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 sm:px-8 py-3 rounded-lg shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 hover:shadow-red-500/50 transition-shadow duration-300"
+              className="bg-red-500 hover:bg-red-600 text-white px-6 sm:px-8 py-3 rounded-lg shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 hover:shadow-red-500/50 transition-shadow duration-200"
             >
               Hacer mi Pedido
             </motion.button>
@@ -68,14 +69,14 @@ const LandingPage = ({ onStart }) => {
         </motion.div>
       )}
 
-      {/* Efecto de transición al salir con desenfoque y transparencia */}
+      {/* Capa de transición suave con blur */}
       {startTransition && (
         <motion.div
-          className="fixed inset-0 bg-white/10 backdrop-blur-sm z-50"
+          className="fixed inset-0 bg-transparent backdrop-blur-md z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.3 }}
         />
       )}
     </AnimatePresence>

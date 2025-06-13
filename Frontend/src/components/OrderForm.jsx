@@ -1,4 +1,3 @@
-// src/components/OrderForm.jsx
 import React, { useState, useEffect } from 'react';
 import PaymentOptions from './PaymentOptions';
 import Contact from './Contact';
@@ -7,6 +6,7 @@ import OrderInputs from './OrderInputs';
 import DeliveryDetails from './DeliveryDetails';
 import SubmitButton from './SubmitButton';
 import { useOrderValidation } from '../hooks/useOrderValidation';
+import { motion } from "framer-motion";
 
 const OrderForm = () => {
   const [order, setOrder] = useState({
@@ -51,7 +51,6 @@ const OrderForm = () => {
     }
   };
 
-  // Aquí invocamos el hook SIN pasarle ningún setter externo
   const {
     handleSubmit,
     isLoading,
@@ -63,9 +62,6 @@ const OrderForm = () => {
     totalPrice,
     handleMercadopagoPayment,
   });
-
-  // Debug en consola
-  console.log("🔍 [OrderForm] paymentMethod state:", paymentMethod);
 
   if (orderSubmitted) {
     return (
@@ -92,10 +88,14 @@ const OrderForm = () => {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center">
       <div className="absolute inset-0">
-        <img
+        <motion.img
           src="/assets/webp/background3.webp"
           alt="Fondo"
           className="w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5 }}
         />
         <div className="absolute inset-0 bg-white opacity-30" />
       </div>
